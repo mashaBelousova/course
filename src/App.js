@@ -1,37 +1,44 @@
-import './App.scss';
-import UserInput from "./UserInput/UserInput";
-import UserOutput from "./UserOutput/UserOutput";
-import React, {Component} from 'react';
+import Expenses from "./components/Expenses";
+import NewExpense from "./components/NewExpense/NewExpense";
+import React, {useState} from 'react';
 
-class App extends Component {
-  state = {
-    users: [
-      {id: '1', name: 'User 1'},
-      {id: '2', name: 'User 2'}
-    ]
+const INITIAL_STATE = [
+  {
+    id: 'e1',
+    title: 'Toilet Paper',
+    amount: 94.12,
+    date: new Date(2020, 7, 14),
+  },
+  { id: 'e2', title: 'New TV', amount: 799.49, date: new Date(2021, 2, 12) },
+  {
+    id: 'e3',
+    title: 'Car Insurance',
+    amount: 294.67,
+    date: new Date(2021, 2, 28),
+  },
+  {
+    id: 'e4',
+    title: 'New Desk (Wooden)',
+    amount: 450,
+    date: new Date(2021, 5, 12),
+  },
+];
+
+function App() {
+  const [expenses, setExpenses] = useState(INITIAL_STATE);
+
+  const addData = (data) => {
+    setExpenses(prevExpenses => {
+      return [data, ...prevExpenses]
+    });
   };
 
-  switchNameHandler = (userId, event) => {
-    const users = [];
-    this.state.users.forEach(
-      user => users.push({id: user.id , name: user.id === userId ? event.target.value: user.name}));
-    this.setState({users});
-  };
-
-  render() {
-    return(
-      <div className="app">
-        <div className="app__user">
-          <UserInput user={this.state.users[0]} click={this.switchNameHandler}/>
-          <UserOutput  user={this.state.users[0]} />
-        </div>
-        <div className="app__user">
-          <UserInput user={this.state.users[1]} click={this.switchNameHandler}/>
-          <UserOutput user={this.state.users[1]}/>
-        </div>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <NewExpense onAddData={addData}></NewExpense>
+      <Expenses expenses={expenses}/>
+    </div>
+  );
 }
 
 export default App;
